@@ -71,7 +71,24 @@ class Tree {
         return this.find(root.right, value)
     }
 
-    levelOrderForEach(callback){}
+    levelOrderForEach(root){
+        if(root == null) return ""
+
+        let levelOrder = ""
+
+        let queue = [root]
+
+        while(queue.length > 0){
+            let current = queue.shift()
+
+            levelOrder += String(current.value) + " ";
+
+            if(current.left !== null) queue.push(current.left)
+            if(current.right !== null) queue.push(current.right)
+        }
+
+        return levelOrder.trim()
+    }
 
     inOrderForEach(callback){}
 
