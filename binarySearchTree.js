@@ -169,7 +169,21 @@ class Tree {
         return dist;
     }
 
-    isBalanced(){}
+    isBalanced(root){
+        return this.isBalancedRecursive(root) > 0;
+    }
+
+    isBalancedRecursive(root){
+        if (root === null) return 0;
+
+        const lHeight = this.isBalancedRecursive(root.left);
+        const rHeight = this.isBalancedRecursive(root.right);
+
+        if (lHeight === -1 || rHeight === -1 || Math.abs(lHeight - rHeight) > 1)
+            return -1;
+
+        return Math.max(lHeight, rHeight) + 1;
+    }
 
     rebalance(){}
 }
