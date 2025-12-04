@@ -90,7 +90,20 @@ class Tree {
         return levelOrder.trim()
     }
 
-    inOrderForEach(callback){}
+    inOrderForEach(root){
+        let result = [];
+
+        const traverse = (node) => {
+            if (node === null) return;
+
+            traverse(node.left);
+            result.push(node.value);
+            traverse(node.right);
+        }
+
+        traverse(root);
+        return result.join(" ");
+    }
 
     preOrderForEach(callback){}
 
