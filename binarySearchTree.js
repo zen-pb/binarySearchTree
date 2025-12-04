@@ -30,7 +30,35 @@ class Tree {
         return root
     }
 
-    deleteItem(value){}
+    deleteItem(root, value){
+        if (root == null)
+            return root;
+
+        if (root.value > value)
+            root.left = this.deleteItem(root.left, value);
+        else if (root.value < value)
+            root.right = this.deleteItem(root.right, value);
+        else {
+            if (root.left === null)
+                return root.right;
+            if (root.right === null)
+                return root.left;
+
+            const succeed = this.getSuccessor(root);
+            root.value = succeed.value;
+            root.right = this.deleteItem(root.right, succeed.value);
+        }
+        return root;
+    }
+
+    getSuccessor(current){
+        current = current.right
+
+        while (current != null && current.left != null)
+            current = current.left
+
+        return current
+    }
 
     find(value){}
 
