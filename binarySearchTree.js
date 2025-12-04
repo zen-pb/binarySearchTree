@@ -196,3 +196,5 @@ class Node {
         this.rigth = right;
     }
 }
+
+export default Tree;
