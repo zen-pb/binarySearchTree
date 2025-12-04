@@ -155,7 +155,19 @@ class Tree {
         return ans;
     }
 
-    depth(value){}
+    depth(root, value){
+        if (!root) return -1;
+
+        let dist = -1;
+
+        if (root.value === value ||
+            (dist = this.depth(root.left, value)) >= 0 ||
+            (dist = this.depth(root.right, value)) >= 0) {
+            return dist + 1;
+        }
+
+        return dist;
+    }
 
     isBalanced(){}
 
