@@ -135,7 +135,25 @@ class Tree {
         return result.join(" ");
     }
 
-    height(value){}
+    height(root, value){
+        let height = { value: -1 };
+
+        this.heightUtil(root, value, height);
+        return height.value;
+    }
+
+    heightUtil(root, value, height){
+        if (!root) return -1;
+
+        let leftHeight = this.heightUtil(root.left, value, height);
+        let rightHeight = this.heightUtil(root.right, value, height);
+
+        let ans = Math.max(leftHeight, rightHeight) + 1;
+
+        if (root.value === value) height.value = ans;
+
+        return ans;
+    }
 
     depth(value){}
 
