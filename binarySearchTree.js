@@ -18,7 +18,17 @@ class Tree {
         return root
     }
 
-    insertItem(value){}
+    insertItem(root, value){
+        if (root == null)
+            return new Node(value);
+
+        if (value < root.value)
+            root.left = this.insertItem(root.left, key);
+        else
+            root.right = this.insertItem(root.right, key);
+
+        return root
+    }
 
     deleteItem(value){}
 
