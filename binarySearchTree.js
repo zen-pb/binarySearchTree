@@ -105,7 +105,20 @@ class Tree {
         return result.join(" ");
     }
 
-    preOrderForEach(callback){}
+    preOrderForEach(root){
+        let result = [];
+
+        const traverse = (node) => {
+            if (node === null) return;
+
+            result.push(node.value);
+            traverse(node.left);
+            traverse(node.right);
+        }
+
+        traverse(root);
+        return result.join(" ");
+    }
 
     postOrderForEach(callback){}
 
