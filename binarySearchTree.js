@@ -120,7 +120,20 @@ class Tree {
         return result.join(" ");
     }
 
-    postOrderForEach(callback){}
+    postOrderForEach(root){
+        let result = [];
+
+        const traverse = (node) => {
+            if (node === null) return;
+
+            traverse(node.left);
+            traverse(node.right);
+            result.push(node.value);
+        }
+
+        traverse(root);
+        return result.join(" ");
+    }
 
     height(value){}
 
