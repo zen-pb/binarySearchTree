@@ -166,7 +166,7 @@ class Tree {
         return dist;
     }
 
-    isBalanced(root){
+    isBalanced(root = this.root){
         return this.isBalancedRecursive(root) > 0;
     }
 
