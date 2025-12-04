@@ -1,6 +1,7 @@
 class Tree {
     constructor(array) {
-        this.root = this.buildTree(array);
+        const sortedArray = [...new Set(array)].sort((a, b) => a - b);
+        this.root = this.buildTree(sortedArray);
     }
 
     buildTree(array, start = 0, end = array.length - 1) {
@@ -9,8 +10,8 @@ class Tree {
         const mid = Math.floor((start + end) / 2)
         const root = new Node(array[mid])
 
-        root.left = this.buildTree(root, start, mid - 1)
-        root.right = this.buildTree(root, mid + 1, end)
+        root.left = this.buildTree(array, start, mid - 1);
+        root.right = this.buildTree(array, mid + 1, end);
 
         return root
     }
@@ -21,7 +22,7 @@ class Tree {
 
         if (value < root.value)
             root.left = this.insertItem(root.left, value);
-        else
+        else if (value > root.value)
             root.right = this.insertItem(root.right, value);
 
         return root
@@ -31,15 +32,13 @@ class Tree {
         if (root == null)
             return root;
 
-        if (root.value > value)
+        if (value < root.value)
             root.left = this.deleteItem(root.left, value);
-        else if (root.value < value)
+        else if (value > root.value)
             root.right = this.deleteItem(root.right, value);
         else {
-            if (root.left === null)
-                return root.right;
-            if (root.right === null)
-                return root.left;
+            if (root.left === null) return root.right;
+            if (root.right === null) return root.left;
 
             const succeed = this.getSuccessor(root);
             root.value = succeed.value;
@@ -58,17 +57,17 @@ class Tree {
     }
 
     find(root, value){
-        if (root == null || root.data === value)
-            return root
+        if (root == null || root.value === value)
+            return root;
 
-        if (root.value > value){
-            return this.find(root.left, value)
+        if (value < root.value) {
+            return this.find(root.left, value);
         }
 
-        return this.find(root.right, value)
+        return this.find(root.right, value);
     }
 
-    levelOrderForEach(root){
+    levelOrderForEach(root = this.root){
         if(root == null) return null
 
         let levelOrder = []
@@ -133,23 +132,20 @@ class Tree {
     }
 
     height(root, value){
-        let height = { value: -1 };
+        if (value !== undefined) {
+            const node = this.find(root, value);
+            if (!node) return -1;
+            root = node;
+        }
 
-        this.heightUtil(root, value, height);
-        return height.value;
+        return this.heightUtil(root);
     }
 
     heightUtil(root, value, height){
         if (!root) return -1;
-
-        let leftHeight = this.heightUtil(root.left, value, height);
-        let rightHeight = this.heightUtil(root.right, value, height);
-
-        let ans = Math.max(leftHeight, rightHeight) + 1;
-
-        if (root.value === value) height.value = ans;
-
-        return ans;
+        const leftHeight = this.heightUtil(root.left);
+        const rightHeight = this.heightUtil(root.right);
+        return Math.max(leftHeight, rightHeight) + 1;
     }
 
     depth(root, value){
@@ -167,25 +163,26 @@ class Tree {
     }
 
     isBalanced(root = this.root){
-        return this.isBalancedRecursive(root) > 0;
+        return this.isBalancedRecursive(root) !== -1;
     }
 
     isBalancedRecursive(root){
         if (root === null) return 0;
 
         const lHeight = this.isBalancedRecursive(root.left);
-        const rHeight = this.isBalancedRecursive(root.right);
+        if (lHeight === -1) return -1;
 
-        if (lHeight === -1 || rHeight === -1 || Math.abs(lHeight - rHeight) > 1)
-            return -1;
+        const rHeight = this.isBalancedRecursive(root.right);
+        if (rHeight === -1) return -1;
+
+        if (Math.abs(lHeight - rHeight) > 1) return -1;
 
         return Math.max(lHeight, rHeight) + 1;
     }
 
     rebalance(root = this.root){
-        let arr = this.levelOrderForEach([], [], root);
-        arr.sort((a, b) => a - b);
-        return this.root = this.buildTree(arr);
+        const sortedArr = this.inOrderForEach(this.root);
+        this.root = this.buildTree(sortedArr);
     }
 }
 
@@ -193,7 +190,7 @@ class Node {
     constructor(value, left = null, right = null) {
         this.value = value;
         this.left = left;
-        this.rigth = right;
+        this.right = right;
     }
 }
 
