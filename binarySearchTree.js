@@ -60,7 +60,16 @@ class Tree {
         return current
     }
 
-    find(value){}
+    find(root, value){
+        if (root == null || root.data === value)
+            return root
+
+        if (root.value > value){
+            return this.find(root.left, value)
+        }
+
+        return this.find(root.right, value)
+    }
 
     levelOrderForEach(callback){}
 
