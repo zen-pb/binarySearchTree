@@ -3,11 +3,8 @@ class Tree {
         this.root = this.buildTree(array);
     }
 
-    buildTree(array, start = 0, end = array.length) {
+    buildTree(array, start = 0, end = array.length - 1) {
         if (start > end) return null
-
-        array = [...new Set(array)]
-        array.sort()
 
         const mid = Math.floor((start + end) / 2)
         const root = new Node(array[mid])
@@ -23,9 +20,9 @@ class Tree {
             return new Node(value);
 
         if (value < root.value)
-            root.left = this.insertItem(root.left, key);
+            root.left = this.insertItem(root.left, value);
         else
-            root.right = this.insertItem(root.right, key);
+            root.right = this.insertItem(root.right, value);
 
         return root
     }
@@ -72,22 +69,22 @@ class Tree {
     }
 
     levelOrderForEach(root){
-        if(root == null) return ""
+        if(root == null) return null
 
-        let levelOrder = ""
+        let levelOrder = []
 
         let queue = [root]
 
         while(queue.length > 0){
             let current = queue.shift()
 
-            levelOrder += String(current.value) + " ";
+            levelOrder.push(current.value)
 
             if(current.left !== null) queue.push(current.left)
             if(current.right !== null) queue.push(current.right)
         }
 
-        return levelOrder.trim()
+        return levelOrder
     }
 
     inOrderForEach(root){
@@ -102,7 +99,7 @@ class Tree {
         }
 
         traverse(root);
-        return result.join(" ");
+        return result
     }
 
     preOrderForEach(root){
@@ -117,7 +114,7 @@ class Tree {
         }
 
         traverse(root);
-        return result.join(" ");
+        return result
     }
 
     postOrderForEach(root){
@@ -132,7 +129,7 @@ class Tree {
         }
 
         traverse(root);
-        return result.join(" ");
+        return result
     }
 
     height(root, value){
@@ -185,7 +182,11 @@ class Tree {
         return Math.max(lHeight, rHeight) + 1;
     }
 
-    rebalance(){}
+    rebalance(root = this.root){
+        let arr = this.levelOrderForEach([], [], root);
+        arr.sort((a, b) => a - b);
+        return this.root = this.buildTree(arr);
+    }
 }
 
 class Node {
